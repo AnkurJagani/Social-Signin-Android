@@ -1,0 +1,35 @@
+   
+   /*For Facebook signout*/
+   public void signOut() {
+        LoginManager loginManager = LoginManager.getInstance();
+        if (loginManager != null) {
+            loginManager.logOut();
+        }
+    }
+    
+    
+    
+       private void clearCookies(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+        } else {
+            CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(context);
+            cookieSyncMngr.startSync();
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.removeAllCookie();
+            cookieManager.removeSessionCookie();
+            cookieSyncMngr.stopSync();
+            cookieSyncMngr.sync();
+        }
+    }
+    
+/*For Twitter signout*/
+    public void signOut() {
+        TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        if (twitterSession != null) {
+            clearCookies(mActivity);
+            Twitter.getSessionManager().clearActiveSession();
+            Twitter.logOut();
+        }
+    }
